@@ -19,6 +19,16 @@ class ItemsController {
 
     private fun getItemByName(nom:String,items:HashSet<Item>):Item?=items.find { nom==it.nom }
 
+    private fun addMsg(resp:Boolean,attrs: RedirectAttributes,title:String,success:String,error:String){
+        if(resp) {
+            attrs.addFlashAttribute("msg",
+                    UIMessage.message(title, success))
+        } else {
+            attrs.addFlashAttribute("msg",
+                    UIMessage.message(title, error,"error","warning circle"))
+
+        }
+    }
     @get:ModelAttribute("items")
     val items: Set<Item>
         get() {
@@ -41,14 +51,13 @@ class ItemsController {
             @ModelAttribute("nom") nom:String,
             @SessionAttribute("items") items:HashSet<Item>,
             attrs:RedirectAttributes):RedirectView{
-        if(items.add(Item(nom))) {
-            attrs.addFlashAttribute("msg",
-                    UIMessage.message("Ajout d'item", "$nom a été ajouté avec succès"))
-        } else {
-            attrs.addFlashAttribute("msg",
-                    UIMessage.message("Ajout d'item", "$nom est déjà dans la liste,<br>Il n'a pas été ajouté.","error","warning circle"))
-
-        }
+        addMsg(
+                items.add(Item(nom)),
+                attrs,
+                "Ajout",
+                "$nom a été ajouté avec succès",
+                "$nom est déjà dans la liste,<br>Il n'a pas été ajouté."
+        )
         return RedirectView("/")
     }
 }
