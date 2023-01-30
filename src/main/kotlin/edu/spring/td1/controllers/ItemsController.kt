@@ -1,6 +1,5 @@
 package edu.spring. td1.controllers
 
-import edu.spring.td1.models.Category
 import edu.spring.td1.models.Item
 import edu.spring.td1.services.UIMessage
 import org.springframework.stereotype.Controller
