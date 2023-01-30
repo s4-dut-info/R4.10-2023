@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import org.springframework.web.servlet.view.RedirectView
 
 @Controller
-@SessionAttributes("items")
+@SessionAttributes("categories")
 class ItemsController {
 
     private fun getItemByName(nom:String,items:HashSet<Item>):
@@ -34,12 +34,15 @@ class ItemsController {
 
         }
     }
-    @get:ModelAttribute("items")
-    val items: Set<Item>
+    @get:ModelAttribute("categories")
+    val categories: Set<Category>
         get() {
-            val items= HashSet<Item>()
-            items.add(Item("Foo"))
-            return items
+            val cats= HashSet<Category>()
+            val cat=Category("Foo")
+            cats.add(cat)
+            cat.addAll("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+            cats.add(Category("Bar").apply { addAll("1","2","3","4","5","6","7","8","9","0") })
+            return cats
         }
     @RequestMapping("/")
     fun indexAction(@RequestAttribute("msg") msg:UIMessage.Message?):String{

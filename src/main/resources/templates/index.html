@@ -4,15 +4,25 @@
 {{#msg}}
     {{> include/message }}
 {{/msg}}
-<ul>
-{{#items}}
-    <li><a href="/update/{{nom}}">{{nom}}</a>
-        <div class="ui rating" data-max-rating="{{evaluation}}"></div>
-        <a class="ui circular mini icon button" href="/inc/{{nom}}"><i class="ui plus icon"></i> </a>
-        <a class="ui circular mini icon button" href="/dec/{{nom}}"><i class="ui minus icon"></i> </a></li>
-{{/items}}
-</ul>
+<div class="ui top attached tabular menu">
+    {{#categories}}
+    <a class="item" data-tab="{{label}}">{{label}}</a>
+    {{/categories}}
+</div>
+{{#categories}}
+<div class="ui bottom attached active tab segment" data-tab="{{label}}">
+    <ul>
+        {{#items}}
+            <li><a href="/update/{{nom}}">{{nom}}</a>
+                <div class="ui rating" data-max-rating="{{evaluation}}"></div>
+                <a class="ui circular mini icon button" href="/inc/{{nom}}"><i class="ui plus icon"></i> </a>
+                <a class="ui circular mini icon button" href="/dec/{{nom}}"><i class="ui minus icon"></i> </a></li>
+        {{/items}}
+    </ul>
+</div>
+{{/categories}}
 {{> include/footer }}
 <script>
     $(".ui.rating").rating();
+    $(".menu .item").tab();
 </script>
