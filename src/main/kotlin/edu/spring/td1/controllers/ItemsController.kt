@@ -1,10 +1,11 @@
-package edu.spring.td1.controllers
+package edu.spring. td1.controllers
 
 import edu.spring.td1.models.Item
 import edu.spring.td1.services.UIMessage
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestMapping
@@ -57,6 +58,23 @@ class ItemsController {
                 "Ajout",
                 "$nom a été ajouté avec succès",
                 "$nom est déjà dans la liste,<br>Il n'a pas été ajouté."
+        )
+        return RedirectView("/")
+    }
+    @GetMapping("/inc/{nom}")
+    fun incAction(
+            @PathVariable nom:String,
+            @SessionAttribute("items") items:HashSet<Item>,
+            attrs:RedirectAttributes
+    ):RedirectView{
+        var item=getItemByName(nom,items)
+        item?.evaluation =item!!.evaluation+1
+        addMsg(
+                item!=null,
+                attrs,
+                "Mise à jour",
+                "$nom incrémenté",
+                "$nom n'existe pas dans les items"
         )
         return RedirectView("/")
     }

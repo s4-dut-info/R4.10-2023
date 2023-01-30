@@ -6,7 +6,12 @@
 {{/msg}}
 <ul>
 {{#items}}
-    <li>{{nom}}</li>
+    <li>{{nom}}
+        <div class="ui rating" data-max-rating="{{evaluation}}"></div>
+        <a class="ui circular mini icon button" href="/inc/{{nom}}"><i class="ui plus icon"></i> </a></li>
 {{/items}}
 </ul>
 {{> include/footer }}
+<script>
+    $(".ui.rating").rating();
+</script>
