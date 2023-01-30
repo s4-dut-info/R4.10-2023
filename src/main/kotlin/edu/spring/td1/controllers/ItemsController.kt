@@ -33,7 +33,7 @@ class ItemsController {
     @get:ModelAttribute("items")
     val items: Set<Item>
         get() {
-            var items= HashSet<Item>()
+            val items= HashSet<Item>()
             items.add(Item("Foo"))
             return items
         }
@@ -67,7 +67,7 @@ class ItemsController {
             @SessionAttribute("items") items:HashSet<Item>,
             attrs:RedirectAttributes
     ):RedirectView{
-        var item=getItemByName(nom,items)
+        val item=getItemByName(nom,items)
         item?.evaluation =item!!.evaluation+1
         addMsg(
                 item!=null,
@@ -84,7 +84,7 @@ class ItemsController {
             @SessionAttribute("items") items:HashSet<Item>,
             attrs:RedirectAttributes
     ):RedirectView{
-        var item=getItemByName(nom,items)
+        val item=getItemByName(nom,items)
         item?.evaluation =item!!.evaluation-1
         addMsg(
                 item!=null,
