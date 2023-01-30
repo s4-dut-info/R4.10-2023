@@ -21,8 +21,8 @@ import org.springframework.web.servlet.view.RedirectView
 @SessionAttributes("categories")
 class ItemsController {
 
-    private fun getItemByName(nom:String,items:HashSet<Item>):
-            Item?=items.find { nom==it.nom }
+    private fun getCategoryByLabel(label:String,categories:HashSet<Category>):
+            Category?=categories.find { label==it.label }
 
     private fun addMsg(resp:Boolean,attrs: RedirectAttributes,title:String,success:String,error:String){
         if(resp) {
@@ -40,8 +40,8 @@ class ItemsController {
             val cats= HashSet<Category>()
             val cat=Category("Foo")
             cats.add(cat)
-            cat.addAll("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
-            cats.add(Category("Bar").apply { addAll("1","2","3","4","5","6","7","8","9","0") })
+            cat.addAll("A","B","C","D","E","F","G","H","I")
+            cats.add(Category("Bar").apply { addAll("1","2","3","4","5","6","7","8","9") })
             return cats
         }
     @RequestMapping("/")
@@ -49,33 +49,35 @@ class ItemsController {
         return "index"
     }
 
-    @GetMapping("/new")
-    fun newAction(model:ModelMap):String{
+    @GetMapping("/new/{category}")
+    fun newAction(model:ModelMap,@PathVariable category: String):String{
         model["item"]=Item("")
-        model["url"]="/addNew"
+        model["url"]="/addNew/$category"
         return "itemForm"
     }
 
-    @GetMapping("/update/{nom}")
+    @GetMapping("/update/{category}/{nom}")
     fun updateAction(
         @PathVariable nom:String,
-        @SessionAttribute("items") items:HashSet<Item>,
+        @PathVariable category:String,
+        @SessionAttribute("categories") categories: HashSet<Category>,
 
         ):ModelAndView{
         val mv=ModelAndView("itemForm")
-        val item=getItemByName(nom,items)
+        val item= getCategoryByLabel(category,categories)?.get(nom)
         mv.addObject("item",item)
-        mv.addObject("url","/update")
+        mv.addObject("url","/update/$category")
         return mv
     }
 
-    @PostMapping("/update")
+    @PostMapping("/update/{category}")
     fun updateSubmitAction(
         @ModelAttribute("nom") nom:String,
         @ModelAttribute("id") id:String,
-        @SessionAttribute("items") items:HashSet<Item>,
+        @PathVariable category:String,
+        @SessionAttribute("categories") categories: HashSet<Category>,
         attrs:RedirectAttributes):RedirectView {
-        val item=getItemByName(id,items)
+        val item=getCategoryByLabel(category,categories)?.get(nom)
         if(item!=null){
             item.nom=nom
         }
@@ -89,27 +91,29 @@ class ItemsController {
         return RedirectView("/")
     }
 
-    @PostMapping("/addNew")
+    @PostMapping("/addNew/{category}")
     fun addNewAction(
             @ModelAttribute("nom") nom:String,
-            @SessionAttribute("items") items:HashSet<Item>,
+            @SessionAttribute("categories") categories: HashSet<Category>,
+            @PathVariable category:String,
             attrs:RedirectAttributes):RedirectView{
         addMsg(
-                items.add(Item(nom)),
+                getCategoryByLabel(category,categories)?.add(nom)?:false,
                 attrs,
                 "Ajout",
-                "$nom a été ajouté avec succès",
-                "$nom est déjà dans la liste,<br>Il n'a pas été ajouté."
+                "$nom a été ajouté avec succès dans $category",
+                "$nom est déjà dans la catégorie $category,<br>Il n'a pas été ajouté."
         )
         return RedirectView("/")
     }
-    @GetMapping("/inc/{nom}")
+    @GetMapping("/inc/{category}/{nom}")
     fun incAction(
             @PathVariable nom:String,
-            @SessionAttribute("items") items:HashSet<Item>,
+            @PathVariable category:String,
+            @SessionAttribute("categories") categories: HashSet<Category>,
             attrs:RedirectAttributes
     ):RedirectView{
-        val item=getItemByName(nom,items)
+        val item= getCategoryByLabel(category,categories)?.get(nom)
         item?.evaluation =item!!.evaluation+1
         addMsg(
                 item!=null,
@@ -120,13 +124,14 @@ class ItemsController {
         )
         return RedirectView("/")
     }
-    @GetMapping("/dec/{nom}")
+    @GetMapping("/dec/{category}/{nom}")
     fun decAction(
             @PathVariable nom:String,
-            @SessionAttribute("items") items:HashSet<Item>,
+            @PathVariable category:String,
+            @SessionAttribute("categories") categories: HashSet<Category>,
             attrs:RedirectAttributes
     ):RedirectView{
-        val item=getItemByName(nom,items)
+        val item= getCategoryByLabel(category,categories)?.get(nom)
         item?.evaluation =item!!.evaluation-1
         addMsg(
                 item!=null,

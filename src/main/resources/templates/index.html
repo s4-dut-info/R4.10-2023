@@ -1,6 +1,5 @@
 {{> include/header }}
 <h1>Gestion d'items</h1>
-<a class="ui button" href="/new">Ajouter un item...</a>
 {{#msg}}
     {{> include/message }}
 {{/msg}}
@@ -10,13 +9,15 @@
     {{/categories}}
 </div>
 {{#categories}}
-<div class="ui bottom attached active tab segment" data-tab="{{label}}">
+    <div class="ui bottom attached tab segment" data-tab="{{label}}">
+        <a class="ui orange button" href="/new/{{label}}">Ajouter un item...</a>
     <ul>
         {{#items}}
-            <li><a href="/update/{{nom}}">{{nom}}</a>
+            <li><a href="/update/{{label}}/{{nom}}">{{nom}}</a>
                 <div class="ui rating" data-max-rating="{{evaluation}}"></div>
-                <a class="ui circular mini icon button" href="/inc/{{nom}}"><i class="ui plus icon"></i> </a>
-                <a class="ui circular mini icon button" href="/dec/{{nom}}"><i class="ui minus icon"></i> </a></li>
+                <a class="ui circular mini icon button" href="/inc/{{label}}/{{nom}}"><i class="ui plus icon"></i> </a>
+                <a class="ui circular mini icon button" href="/dec/{{label}}/{{nom}}"><i class="ui minus icon"></i> </a>
+            </li>
         {{/items}}
     </ul>
 </div>

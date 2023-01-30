@@ -10,4 +10,6 @@ data class Category(var label:String) {
     fun addAll(vararg itemNames:String){
         itemNames.forEach { items.add(Item(it)) }
     }
+
+    fun add(itemName:String):Boolean=items.add(Item(itemName))
 }
