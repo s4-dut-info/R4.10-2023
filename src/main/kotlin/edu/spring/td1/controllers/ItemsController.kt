@@ -1,5 +1,6 @@
 package edu.spring. td1.controllers
 
+import edu.spring.td1.models.Category
 import edu.spring.td1.models.Item
 import edu.spring.td1.services.UIMessage
 import org.springframework.stereotype.Controller
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.SessionAttribute
 import org.springframework.web.bind.annotation.SessionAttributes
+import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import org.springframework.web.servlet.view.RedirectView
 
@@ -19,7 +21,8 @@ import org.springframework.web.servlet.view.RedirectView
 @SessionAttributes("items")
 class ItemsController {
 
-    private fun getItemByName(nom:String,items:HashSet<Item>):Item?=items.find { nom==it.nom }
+    private fun getItemByName(nom:String,items:HashSet<Item>):
+            Item?=items.find { nom==it.nom }
 
     private fun addMsg(resp:Boolean,attrs: RedirectAttributes,title:String,success:String,error:String){
         if(resp) {
@@ -46,7 +49,41 @@ class ItemsController {
     @GetMapping("/new")
     fun newAction(model:ModelMap):String{
         model["item"]=Item("")
+        model["url"]="/addNew"
         return "itemForm"
+    }
+
+    @GetMapping("/update/{nom}")
+    fun updateAction(
+        @PathVariable nom:String,
+        @SessionAttribute("items") items:HashSet<Item>,
+
+        ):ModelAndView{
+        val mv=ModelAndView("itemForm")
+        val item=getItemByName(nom,items)
+        mv.addObject("item",item)
+        mv.addObject("url","/update")
+        return mv
+    }
+
+    @PostMapping("/update")
+    fun updateSubmitAction(
+        @ModelAttribute("nom") nom:String,
+        @ModelAttribute("id") id:String,
+        @SessionAttribute("items") items:HashSet<Item>,
+        attrs:RedirectAttributes):RedirectView {
+        val item=getItemByName(id,items)
+        if(item!=null){
+            item.nom=nom
+        }
+        addMsg(
+            item!=null,
+            attrs,
+            "Modification",
+            "$nom a été modifié avec succès",
+            "$nom n'est pas dans les items."
+        )
+        return RedirectView("/")
     }
 
     @PostMapping("/addNew")
