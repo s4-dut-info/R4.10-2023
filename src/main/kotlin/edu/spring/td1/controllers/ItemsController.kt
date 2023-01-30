@@ -78,4 +78,21 @@ class ItemsController {
         )
         return RedirectView("/")
     }
+    @GetMapping("/dec/{nom}")
+    fun decAction(
+            @PathVariable nom:String,
+            @SessionAttribute("items") items:HashSet<Item>,
+            attrs:RedirectAttributes
+    ):RedirectView{
+        var item=getItemByName(nom,items)
+        item?.evaluation =item!!.evaluation-1
+        addMsg(
+                item!=null,
+                attrs,
+                "Mise à jour",
+                "$nom décrémenté",
+                "$nom n'existe pas dans les items"
+        )
+        return RedirectView("/")
+    }
 }
