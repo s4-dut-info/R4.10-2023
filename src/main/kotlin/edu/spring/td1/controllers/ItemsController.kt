@@ -24,14 +24,14 @@ class ItemsController {
     private fun getCategoryByLabel(label:String,categories:HashSet<Category>):
             Category?=categories.find { label==it.label }
 
-    private fun addMsg(resp:Boolean,attrs: RedirectAttributes,title:String,success:String,error:String){
+    private fun addMsg(category:String,resp:Boolean,attrs: RedirectAttributes,title:String,success:String,error:String){
+        attrs.addFlashAttribute("category",category)
         if(resp) {
             attrs.addFlashAttribute("msg",
                     UIMessage.message(title, success))
         } else {
             attrs.addFlashAttribute("msg",
                     UIMessage.message(title, error,"error","warning circle"))
-
         }
     }
     @get:ModelAttribute("categories")
@@ -82,6 +82,7 @@ class ItemsController {
             item.nom=nom
         }
         addMsg(
+            category,
             item!=null,
             attrs,
             "Modification",
@@ -98,6 +99,7 @@ class ItemsController {
             @PathVariable category:String,
             attrs:RedirectAttributes):RedirectView{
         addMsg(
+                category,
                 getCategoryByLabel(category,categories)?.add(nom)?:false,
                 attrs,
                 "Ajout",
@@ -116,6 +118,7 @@ class ItemsController {
         val item= getCategoryByLabel(category,categories)?.get(nom)
         item?.evaluation =item!!.evaluation+1
         addMsg(
+                category,
                 item!=null,
                 attrs,
                 "Mise à jour",
@@ -134,6 +137,7 @@ class ItemsController {
         val item= getCategoryByLabel(category,categories)?.get(nom)
         item?.evaluation =item!!.evaluation-1
         addMsg(
+                category,
                 item!=null,
                 attrs,
                 "Mise à jour",

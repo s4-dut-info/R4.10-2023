@@ -25,5 +25,5 @@
 {{> include/footer }}
 <script>
     $(".ui.rating").rating();
-    $(".menu .item").tab();
+    $(".menu .item").tab({autoTabActivation: {{#category}}'{{.}}'{{/category}}{{^category}}true{{/category}} });
 </script>
