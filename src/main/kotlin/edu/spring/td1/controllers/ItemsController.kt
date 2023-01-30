@@ -17,6 +17,8 @@ import org.springframework.web.servlet.view.RedirectView
 @SessionAttributes("items")
 class ItemsController {
 
+    private fun getItemByName(nom:String,items:HashSet<Item>):Item?=items.find { nom==it.nom }
+
     @get:ModelAttribute("items")
     val items: Set<Item>
         get() {
