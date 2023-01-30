@@ -3,6 +3,7 @@ package edu.spring. td1.controllers
 import edu.spring.td1.models.Item
 import edu.spring.td1.services.UIMessage
 import org.springframework.stereotype.Controller
+import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
@@ -43,8 +44,9 @@ class ItemsController {
     }
 
     @GetMapping("/new")
-    fun newAction():String{
-        return "newForm"
+    fun newAction(model:ModelMap):String{
+        model["item"]=Item("")
+        return "itemForm"
     }
 
     @PostMapping("/addNew")
