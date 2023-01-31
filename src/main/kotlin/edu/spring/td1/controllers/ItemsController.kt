@@ -38,10 +38,9 @@ class ItemsController {
     val categories: Set<Category>
         get() {
             val cats= HashSet<Category>()
-            val cat=Category("Foo")
-            cats.add(cat)
-            cat.addAll("A","B","C","D","E","F","G","H","I")
-            cats.add(Category("Bar").apply { addAll("1","2","3","4","5","6","7","8","9") })
+            cats.add(Category.all)
+            cats.add(Category.create("Fruits","Pomme","Banane","Orange","Kiwi","Fraise","Mangue","Poire","Pêche"))
+            cats.add(Category.create("Légumes","Carotte","Tomate","Poivron","Courgette","Haricot","Aubergine","Chou","Oignon"))
             return cats
         }
     @RequestMapping("/")
@@ -77,7 +76,7 @@ class ItemsController {
         @PathVariable category:String,
         @SessionAttribute("categories") categories: HashSet<Category>,
         attrs:RedirectAttributes):RedirectView {
-        val item=getCategoryByLabel(category,categories)?.get(nom)
+        val item=getCategoryByLabel(category,categories)?.get(id)
         if(item!=null){
             item.nom=nom
         }

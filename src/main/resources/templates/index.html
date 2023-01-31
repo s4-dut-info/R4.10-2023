@@ -10,7 +10,9 @@
 </div>
 {{#categories}}
     <div class="ui bottom attached tab segment" data-tab="{{label}}">
+        {{#insertable}}
         <a class="ui orange button" href="/new/{{label}}">Ajouter un item...</a>
+        {{/insertable}}
     <ul>
         {{#items}}
             <li><a href="/update/{{label}}/{{nom}}">{{nom}}</a>
