@@ -1,12 +1,14 @@
 {{> include/header }}
 <h1>Gestion d'items</h1>
-<h2>{{category}}</h2>
+<h2>Item</h2>
+<h3>{{category}}</h3>
 {{#item}}
 <form class="ui form" method="post" action="{{url}}">
     <input type="hidden" name="id" value="{{nom}}">
     <input class="ui input" type="text" value="{{nom}}" name="nom" placeholder="Nom de l'élément" required>
     <hr>
     <button class="ui positive button" type="submit">Valider</button>
+    <a href="/?category={{category}}" class="ui negative button">Annuler</a>
 </form>
 {{/item}}
 {{> include/footer }}

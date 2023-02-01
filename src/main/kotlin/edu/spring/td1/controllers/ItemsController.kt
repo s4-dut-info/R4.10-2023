@@ -3,6 +3,7 @@ package edu.spring. td1.controllers
 import edu.spring.td1.models.Category
 import edu.spring.td1.models.Item
 import edu.spring.td1.services.UIMessage
+import jakarta.annotation.Nullable
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.SessionAttribute
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.SessionAttributes
 import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
@@ -45,7 +46,10 @@ class ItemsController {
             return cats
         }
     @RequestMapping("/")
-    fun indexAction(@RequestAttribute("msg") msg:UIMessage.Message?):String{
+    fun indexAction(@RequestAttribute("msg") msg:UIMessage.Message?, @ModelAttribute(name="category") category: String?,model:ModelMap):String{
+        if(category!==null) {
+            model["category"] = if (category == "") null else category
+        }
         return "index"
     }
 
@@ -54,6 +58,29 @@ class ItemsController {
         model["item"]=Item("")
         model["url"]="/addNew/$category"
         return "itemForm"
+    }
+
+    @GetMapping("/new")
+    fun newCategoryAction(model:ModelMap):String{
+        model["category"]=Category("")
+        model["url"]="/addNewCategory"
+        return "categoryForm"
+    }
+
+    @PostMapping("/addNewCategory")
+    fun addNewCategoryAction(
+        @ModelAttribute("category") category:Category,
+        @ModelAttribute("categories") categories: HashSet<Category>,
+        attrs:RedirectAttributes):RedirectView {
+        val resp=categories.add(category)
+        addMsg(
+            category.label,
+            resp,
+            attrs,
+            "Ajout d'une nouvelle catégorie",
+            "La catégorie ${category.label} a été ajoutée avec succès",
+            "La catégorie ${category.label} existe déjà")
+        return RedirectView("/")
     }
 
     @GetMapping("/update/{category}/{nom}")
