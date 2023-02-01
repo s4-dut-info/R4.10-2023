@@ -13,15 +13,27 @@
         {{#insertable}}
         <a class="ui orange button" href="/new/{{label}}">Ajouter un item...</a>
         {{/insertable}}
-    <ul>
+    <div class="ui middle aligned divided list">
         {{#items}}
-            <li><a href="/update/{{label}}/{{nom}}">{{nom}}</a>
-                <div class="ui rating" data-max-rating="{{evaluation}}"></div>
-                <a class="ui circular mini icon button" href="/inc/{{label}}/{{nom}}"><i class="ui plus icon"></i> </a>
-                <a class="ui circular mini icon button" href="/dec/{{label}}/{{nom}}"><i class="ui minus icon"></i> </a>
-            </li>
+            <div class="item">
+                <div class="right floated content">
+                    <a class="ui circular mini icon button" href="/inc/{{label}}/{{nom}}"><i class="ui plus icon"></i> </a>
+                    <a class="ui circular mini icon button" href="/dec/{{label}}/{{nom}}"><i class="ui minus icon"></i> </a>
+                </div>
+                <div class="middle aligned content">
+                        <a class="header" href="/update/{{label}}/{{nom}}">{{nom}}</a>
+                        <div class="description">
+                            {{#notZero}}
+                                <span class="ui rating" data-rating="{{evaluation}}" data-max-rating="{{evaluation}}"></span>
+                            {{/notZero}}
+                            {{^notZero}}
+                                <i class="ui window minimize icon"></i>
+                            {{/notZero}}
+                        </div>
+                </div>
+            </div>
         {{/items}}
-    </ul>
+    </div>
 </div>
 {{/categories}}
 {{> include/footer }}

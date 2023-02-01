@@ -19,7 +19,10 @@ data class Category(var label:String) {
     fun add(itemName:String):Boolean{
         val item=Item(itemName)
         if(addItem(item)){
+            if(insertable) {
                 return all.addItem(item)
+            }
+            return true
         }
         return false
     }

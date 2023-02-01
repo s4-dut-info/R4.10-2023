@@ -5,4 +5,6 @@ data class Item(var nom: String) {
         set(value) {
             if(value in 0..10) field=value
         }
+    val notZero:Boolean
+        get() = evaluation>0
 }
