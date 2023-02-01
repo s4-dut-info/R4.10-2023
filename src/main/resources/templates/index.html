@@ -5,7 +5,16 @@
 {{/msg}}
 <div class="ui top attached tabular menu">
     {{#categories}}
-    <a class="item" data-tab="{{label}}">{{label}}</a>
+    <a class="item" data-tab="{{label}}">{{label}} <span class="ui label">
+        {{count}}</span>
+        {{#insertable}}
+        <form method="post" action="/remove/{{label}}" id="frm-close">
+            <button class="ui black mini right floated icon button _close" type="submit">
+                <i class="ui remove icon"></i>
+            </button>
+        </form>
+        {{/insertable}}
+    </a>
     {{/categories}}
 </div>
 {{#categories}}
@@ -54,4 +63,5 @@
 <script>
     $(".ui.rating").rating();
     $(".menu .item").tab({autoTabActivation: {{#category}}'{{.}}'{{/category}}{{^category}}true{{/category}} });
+    $('._close').on('click',function(){$("#frm-close").submit();return false;});
 </script>

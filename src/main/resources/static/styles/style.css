@@ -1,0 +1,3 @@
+.item:not(.active) button{
+    display: none;
+}

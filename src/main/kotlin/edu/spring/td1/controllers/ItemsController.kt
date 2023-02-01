@@ -181,4 +181,23 @@ class ItemsController {
         )
         return RedirectView("/")
     }
+    @PostMapping("/remove/{category}")
+    fun removeCategoryAction(
+            @PathVariable category:String,
+            @ModelAttribute("categories") categories: HashSet<Category>,
+            attrs:RedirectAttributes
+    ):RedirectView{
+        val cat= getCategoryByLabel(category,categories)
+        cat?.clear()
+        categories.remove(cat)
+        addMsg(
+                "Toutes",
+                cat!=null,
+                attrs,
+                "Suppression de la catégorie",
+                "$category supprimée",
+                "$category n'existe pas"
+        )
+        return RedirectView("/")
+    }
 }

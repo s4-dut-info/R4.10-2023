@@ -8,6 +8,8 @@ data class Category(var label:String):Serializable {
 
     val clearable:Boolean
         get() = items.isNotEmpty()
+    val count:Int
+        get() = items.size
     private constructor(label:String,insertable:Boolean):this(label){
         this.insertable=insertable
     }
