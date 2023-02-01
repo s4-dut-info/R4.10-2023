@@ -34,8 +34,9 @@ class ItemsController {
                     UIMessage.message(title, error,"error","warning circle"))
         }
     }
-    @get:ModelAttribute("categories")
+
     val categories: Set<Category>
+        @ModelAttribute("categories")
         get() {
             val cats= HashSet<Category>()
             cats.add(Category.all)
@@ -59,7 +60,7 @@ class ItemsController {
     fun updateAction(
         @PathVariable nom:String,
         @PathVariable category:String,
-        @SessionAttribute("categories") categories: HashSet<Category>,
+        @ModelAttribute("categories") categories: HashSet<Category>,
 
         ):ModelAndView{
         val mv=ModelAndView("itemForm")
@@ -74,7 +75,7 @@ class ItemsController {
         @ModelAttribute("nom") nom:String,
         @ModelAttribute("id") id:String,
         @PathVariable category:String,
-        @SessionAttribute("categories") categories: HashSet<Category>,
+        @ModelAttribute("categories") categories: HashSet<Category>,
         attrs:RedirectAttributes):RedirectView {
         val item=getCategoryByLabel(category,categories)?.get(id)
         if(item!=null){
@@ -94,7 +95,7 @@ class ItemsController {
     @PostMapping("/addNew/{category}")
     fun addNewAction(
             @ModelAttribute("nom") nom:String,
-            @SessionAttribute("categories") categories: HashSet<Category>,
+            @ModelAttribute("categories") categories: HashSet<Category>,
             @PathVariable category:String,
             attrs:RedirectAttributes):RedirectView{
         addMsg(
@@ -111,7 +112,7 @@ class ItemsController {
     fun incAction(
             @PathVariable nom:String,
             @PathVariable category:String,
-            @SessionAttribute("categories") categories: HashSet<Category>,
+            @ModelAttribute("categories") categories: HashSet<Category>,
             attrs:RedirectAttributes
     ):RedirectView{
         val item= getCategoryByLabel(category,categories)?.get(nom)
@@ -130,7 +131,7 @@ class ItemsController {
     fun decAction(
             @PathVariable nom:String,
             @PathVariable category:String,
-            @SessionAttribute("categories") categories: HashSet<Category>,
+            @ModelAttribute( "categories") categories: HashSet<Category>,
             attrs:RedirectAttributes
     ):RedirectView{
         val item= getCategoryByLabel(category,categories)?.get(nom)
@@ -142,6 +143,41 @@ class ItemsController {
                 "Mise à jour",
                 "$nom décrémenté",
                 "$nom n'existe pas dans les items"
+        )
+        return RedirectView("/")
+    }
+
+    @GetMapping("/clear/{category}")
+    fun clearAction(
+            @PathVariable category:String,
+            @ModelAttribute("categories") categories: HashSet<Category>,
+            attrs:RedirectAttributes
+    ):RedirectView{
+          val cat= getCategoryByLabel(category,categories)
+        cat?.clear()
+        addMsg(
+                category,
+                cat!=null,
+                attrs,
+                "Suppression des items",
+                "$category vidé",
+                "$category n'existe pas"
+        )
+        return RedirectView("/")
+    }
+    @GetMapping("/clear")
+    fun clearAllAction(
+            @ModelAttribute("categories") categories: HashSet<Category>,
+            attrs:RedirectAttributes
+    ):RedirectView{
+        categories.forEach { it.clear() }
+        addMsg(
+                "Toutes",
+                categories.isNotEmpty(),
+                attrs,
+                "Suppression des items",
+                "Toutes les catégories ont été vidées",
+                "Aucune catégorie n'a été vidée"
         )
         return RedirectView("/")
     }

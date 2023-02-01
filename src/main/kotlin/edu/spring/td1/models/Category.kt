@@ -1,16 +1,20 @@
 package edu.spring.td1.models
 
-data class Category(var label:String) {
-    private val items=HashSet<Item>()
-    var insertable:Boolean=true
+import java.io.Serializable
 
+data class Category(var label:String):Serializable {
+    private val items=HashSet<Item>()
+    private var insertable:Boolean=true
+
+    val clearable:Boolean
+        get() = items.isNotEmpty()
     private constructor(label:String,insertable:Boolean):this(label){
         this.insertable=insertable
     }
 
-        operator fun get (itemName:String):Item? {
-            return items.find { it.nom==itemName }
-        }
+    operator fun get (itemName:String):Item? {
+        return items.find { it.nom==itemName }
+    }
 
     fun addAll(vararg itemNames:String){
         itemNames.forEach { add(it) }
@@ -32,6 +36,14 @@ data class Category(var label:String) {
         }
         return false
     }
+
+    fun clear() {
+        if(this!=all) {
+            all.items.removeAll(items)
+            items.clear()
+        }
+    }
+
     companion object{
         fun create(label:String,vararg itemNames:String):Category{
             val cat=Category(label)
