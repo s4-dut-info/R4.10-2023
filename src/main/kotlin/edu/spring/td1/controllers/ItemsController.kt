@@ -58,6 +58,12 @@ class ItemsController {
         return "itemForm"
     }
 
+    @GetMapping("/new/{category}/bulk")
+    fun newBulkAction(model:ModelMap,@PathVariable category: String):String{
+        model["url"]="/addNew/$category"
+        return "itemForm"
+    }
+
     @GetMapping("/new")
     fun newCategoryAction(model:ModelMap):String{
         model["category"]=Category("")
@@ -76,8 +82,8 @@ class ItemsController {
             resp,
             attrs,
             "Ajout d'une nouvelle catégorie",
-            "La catégorie ${category.label} a été ajoutée avec succès",
-            "La catégorie ${category.label} existe déjà")
+            "La catégorie ${category.label} a été ajoutée avec succès.",
+            "La catégorie ${category.label} existe déjà !")
         return RedirectView("/")
     }
 
@@ -111,8 +117,8 @@ class ItemsController {
             item!=null,
             attrs,
             "Modification",
-            "$nom a été modifié avec succès",
-            "$nom n'est pas dans les items."
+            "$nom a été modifié avec succès.",
+            "$nom n'est pas dans les items !"
         )
         return RedirectView("/")
     }
@@ -123,12 +129,13 @@ class ItemsController {
             @ModelAttribute("categories") categories: HashSet<Category>,
             @PathVariable category:String,
             attrs:RedirectAttributes):RedirectView{
+        val noms=nom.split("\n").map { it.trim() }.toTypedArray()
         addMsg(
                 category,
-                getCategoryByLabel(category,categories)?.add(nom)?:false,
+                getCategoryByLabel(category,categories)?.addAll(*noms)?:false,
                 attrs,
                 "Ajout",
-                "$nom a été ajouté avec succès dans $category",
+                "$nom a été ajouté avec succès dans $category.",
                 "$nom est déjà dans la catégorie $category,<br>Il n'a pas été ajouté."
         )
         return RedirectView("/")
@@ -147,8 +154,8 @@ class ItemsController {
                 item!=null,
                 attrs,
                 "Mise à jour",
-                "$nom incrémenté",
-                "$nom n'existe pas dans les items"
+                "$nom incrémenté.",
+                "$nom n'existe pas dans les items !"
         )
         return RedirectView("/")
     }
@@ -166,8 +173,8 @@ class ItemsController {
                 item!=null,
                 attrs,
                 "Mise à jour",
-                "$nom décrémenté",
-                "$nom n'existe pas dans les items"
+                "$nom décrémenté.",
+                "$nom n'existe pas dans les items !"
         )
         return RedirectView("/")
     }
@@ -185,8 +192,8 @@ class ItemsController {
                 cat!=null,
                 attrs,
                 "Suppression des items",
-                "$category vidé",
-                "$category n'existe pas"
+                "La catégorie $category a été vidée.",
+                "La catégorie $category n'existe pas !"
         )
         return RedirectView("/")
     }
@@ -201,8 +208,8 @@ class ItemsController {
                 categories.isNotEmpty(),
                 attrs,
                 "Suppression des items",
-                "Toutes les catégories ont été vidées",
-                "Aucune catégorie n'a été vidée"
+                "Toutes les catégories ont été vidées.",
+                "Aucune catégorie n'a été vidée !"
         )
         return RedirectView("/")
     }
@@ -220,8 +227,8 @@ class ItemsController {
                 cat!=null,
                 attrs,
                 "Suppression de la catégorie",
-                "$category supprimée",
-                "$category n'existe pas"
+                "La catégorie $category a été supprimée.",
+                "La catégorie $category n'existe pas !"
         )
         return RedirectView("/")
     }

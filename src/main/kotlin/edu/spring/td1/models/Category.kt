@@ -18,8 +18,10 @@ data class Category(var label:String):Serializable {
         return items.find { it.nom==itemName }
     }
 
-    fun addAll(vararg itemNames:String){
+    fun addAll(vararg itemNames:String):Boolean{
+        val count=items.size
         itemNames.forEach { add(it) }
+        return count<items.size
     }
 
     fun add(itemName:String):Boolean{
