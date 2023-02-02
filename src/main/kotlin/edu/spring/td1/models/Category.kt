@@ -3,7 +3,7 @@ package edu.spring.td1.models
 import java.io.Serializable
 
 data class Category(var label:String):Serializable {
-    private val items=HashSet<Item>()
+    private val items=LinkedHashSet<Item>()
     private var insertable:Boolean=true
 
     val clearable:Boolean

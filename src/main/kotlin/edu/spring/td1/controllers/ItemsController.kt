@@ -3,7 +3,6 @@ package edu.spring. td1.controllers
 import edu.spring.td1.models.Category
 import edu.spring.td1.models.Item
 import edu.spring.td1.services.UIMessage
-import jakarta.annotation.Nullable
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.SessionAttributes
 import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
@@ -39,7 +37,7 @@ class ItemsController {
     val categories: Set<Category>
         @ModelAttribute("categories")
         get() {
-            val cats= HashSet<Category>()
+            val cats= LinkedHashSet<Category>()
             cats.add(Category.all)
             cats.add(Category.create("Fruits","Pomme","Banane","Orange","Kiwi","Fraise","Mangue","Poire","Pêche"))
             cats.add(Category.create("Légumes","Carotte","Tomate","Poivron","Courgette","Haricot","Aubergine","Chou","Oignon"))
