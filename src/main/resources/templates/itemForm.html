@@ -6,7 +6,7 @@
 <form class="ui form" method="post" action="{{url}}">
 {{#item}}
     <input type="hidden" name="id" value="{{nom}}">
-    <input class="ui input" type="text" value="{{nom}}" name="nom" placeholder="Nom de l'élément" required>
+    <input class="ui input" type="text" value="{{nom}}" name="nom" placeholder="Nom de l'élément">
     <input class="ui input" type="number" min="0" max="10" value="{{evaluation}}" name="evaluation" disabled>
 {{/item}}
 {{^item}}
@@ -16,4 +16,18 @@
     <button class="ui positive button" type="submit">Valider</button>
     <a href="/?category={{category}}" class="ui negative button">Annuler</a>
 </form>
+
+{{#item}}
+{{#cat}}
+    {{#insertable}}
+        <hr>
+        <form method="post" action="/remove/{{label}}/{{nom}}" id="frm-close">
+            <button class="ui black button _close" type="submit">
+                <i class="ui remove icon"></i>
+                Supprimer l'item {{nom}} de la liste {{label}}
+            </button>
+        </form>
+    {{/insertable}}
+{{/cat}}
+{{/item}}
 {{> include/footer }}

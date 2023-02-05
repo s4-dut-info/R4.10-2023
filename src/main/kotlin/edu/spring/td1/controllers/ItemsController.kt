@@ -2,7 +2,9 @@ package edu.spring. td1.controllers
 
 import edu.spring.td1.models.Category
 import edu.spring.td1.models.Item
+import edu.spring.td1.services.CategoriesService
 import edu.spring.td1.services.UIMessage
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,6 +22,8 @@ import org.springframework.web.servlet.view.RedirectView
 @SessionAttributes("categories")
 class ItemsController {
 
+    @Autowired
+    lateinit var categoriesService: CategoriesService
     private fun getCategoryByLabel(label:String,categories:HashSet<Category>):
             Category?=categories.find { label==it.label }
 
@@ -36,13 +40,7 @@ class ItemsController {
 
     val categories: Set<Category>
         @ModelAttribute("categories")
-        get() {
-            val cats= LinkedHashSet<Category>()
-            cats.add(Category.all)
-            cats.add(Category.create("Fruits","Pomme","Banane","Orange","Kiwi","Fraise","Mangue","Poire","Pêche"))
-            cats.add(Category.create("Légumes","Carotte","Tomate","Poivron","Courgette","Haricot","Aubergine","Chou","Oignon"))
-            return cats
-        }
+        get()=categoriesService.initCategories()
     @RequestMapping("/")
     fun indexAction(@RequestAttribute("msg") msg:UIMessage.Message?, @ModelAttribute(name="category") category: String?,model:ModelMap):String{
         if(category!==null) {
@@ -95,10 +93,30 @@ class ItemsController {
 
         ):ModelAndView{
         val mv=ModelAndView("itemForm")
-        val item= getCategoryByLabel(category,categories)?.get(nom)
+        val cat=getCategoryByLabel(category,categories)
+        val item= cat?.get(nom)
         mv.addObject("item",item)
         mv.addObject("url","/update/$category")
+        mv.addObject("cat",cat)
         return mv
+    }
+
+    @PostMapping("/remove/{category}/{nom}")
+    fun removeAction(
+        @PathVariable nom:String,
+        @PathVariable category:String,
+        @ModelAttribute("categories") categories: HashSet<Category>,
+        attrs:RedirectAttributes):RedirectView {
+        val cat=getCategoryByLabel(category,categories)
+        val resp=cat?.remove(nom)
+        addMsg(
+            category,
+            resp!!,
+            attrs,
+            "Suppression",
+            "$nom a été supprimé avec succès.",
+            "$nom n'est pas dans les items !")
+        return RedirectView("/")
     }
 
     @PostMapping("/update/{category}")
@@ -108,10 +126,9 @@ class ItemsController {
         @PathVariable category:String,
         @ModelAttribute("categories") categories: HashSet<Category>,
         attrs:RedirectAttributes):RedirectView {
-        val item=getCategoryByLabel(category,categories)?.get(id)
-        if(item!=null){
-            item.nom=nom
-        }
+        val cat=getCategoryByLabel(category,categories)
+        val item=cat?.get(id)
+        item?.nom = nom
         addMsg(
             category,
             item!=null,
@@ -120,6 +137,7 @@ class ItemsController {
             "$nom a été modifié avec succès.",
             "$nom n'est pas dans les items !"
         )
+
         return RedirectView("/")
     }
 

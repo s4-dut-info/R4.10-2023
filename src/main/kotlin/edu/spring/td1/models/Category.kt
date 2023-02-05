@@ -48,6 +48,13 @@ data class Category(var label:String):Serializable {
         }
     }
 
+    fun remove(itemName: String):Boolean {
+        if(this!=all) {
+            all.items.removeIf { it.nom == itemName }
+        }
+        return items.removeIf{it.nom==itemName}
+    }
+
     companion object{
         fun create(label:String,vararg itemNames:String):Category{
             val cat=Category(label)
