@@ -1,6 +1,8 @@
 # R4.10-2023
 R4.10 Compléments web
 
+![Tests de td1-v3](https://github.com/s4-dut-info/R4.10-2023/actions/workflows/maven.yml/badge.svg?branch=td1-v3)
+
 ## Conventions
 - Repository Tds
   - La branche **main** ne contient pas de projet
