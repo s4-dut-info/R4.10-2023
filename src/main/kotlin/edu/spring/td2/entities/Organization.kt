@@ -18,10 +18,10 @@ open class Organization {
     open val users= mutableSetOf<User>()
 
     @OneToMany(mappedBy = "organization")
-    open val groups:MutableSet<Group>?= HashSet()
+    open val groups = mutableSetOf<Group>()
 
     fun addUser(user:User){
-        if(users?.add(user) == true){
+        if(users.add(user)){
             user.organization=this
         }
     }

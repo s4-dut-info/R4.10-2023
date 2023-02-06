@@ -19,5 +19,5 @@ open class Group {
     open lateinit var organization:Organization
 
     @ManyToMany(mappedBy = "groups")
-    open val users:Set<User>?=HashSet()
+    open val users=mutableSetOf<User>()
 }

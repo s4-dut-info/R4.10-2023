@@ -34,5 +34,5 @@ open class User {
 
     @ManyToMany()
     @JoinTable(name="user_groups")
-    open val groups:Set<Group>?=HashSet()
+    open val groups = mutableSetOf<Group>()
 }
