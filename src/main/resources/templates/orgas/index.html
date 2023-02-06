@@ -1,0 +1,14 @@
+{{> main/header }}
+<h2>Organisations</h2>
+<ul>
+{{#orgas}}
+    <li>{{name}}
+    <ul>
+        {{#users}}
+            <li>{{email}}</li>
+        {{/users}}
+    </ul>
+    </li>
+{{/orgas}}
+</ul>
+{{> main/footer }}
