@@ -1,0 +1,25 @@
+name: Verify the app before merging
+
+on:
+  push:
+    branches: [td1-v3]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Java version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Run the Maven verify phase
+        run: mvn --batch-mode --update-snapshots verify -P test -DskipTests=false
