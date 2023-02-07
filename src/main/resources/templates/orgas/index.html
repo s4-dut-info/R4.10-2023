@@ -8,6 +8,9 @@
 <ul>
 {{#orgas}}
     <li>{{name}}
+        <a href="/orgas/delete/{{id}}" class="ui circular mini icon red button">
+            <i class="ui remove icon"></i>
+        </a>
     <ul>
         {{#users}}
             <li>{{lastname}} - {{email}}</li>
