@@ -8,10 +8,11 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.view.RedirectView
-import java.util.UUID
+import java.util.*
 
 @Controller
 @RequestMapping("/orgas/")
@@ -35,18 +36,26 @@ class OrgaController {
     @PostMapping("/new")
     fun submitNewAction(
         @ModelAttribute orga:Organization,
-        @ModelAttribute users:String
+        @ModelAttribute("users") users:String
     ):RedirectView{
-        val usersArray=users.split("\n").forEach{
-            val user=User()
-            val values=it.split(" ")
-            user.firstname=values.getOrNull(0)
-            user.lastname=values.getOrNull(1)
-            user.email="${user.lastname}.${user.firstname}@${orga.domain}"
-            user.password=UUID.randomUUID().toString()
-            orga.addUser(user)
+        if(users.trim().isNotEmpty()) {
+            users.split("\n").forEach {
+                val user = User()
+                val values = it.trim().split(" ", limit = 2)
+                user.firstname = values.getOrElse(0) { "" }
+                user.lastname = values.getOrElse(1) { "" }
+                user.email = "${user.firstname}.${user.lastname}@${orga.domain}".lowercase()
+                user.password = List(8) { (0x21..0x7e).random().toChar() }.joinToString("")
+                orga.addUser(user)
+            }
         }
         orgaRespository.save(orga)
+        return RedirectView("/orgas/")
+    }
+
+    @GetMapping("/delete/{id}")
+    fun deleteAction(@PathVariable id:Int):RedirectView{
+        orgaRespository.deleteById(id)
         return RedirectView("/orgas/")
     }
 }
