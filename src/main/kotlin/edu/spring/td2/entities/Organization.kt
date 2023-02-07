@@ -18,6 +18,7 @@ open class Organization {
     open var aliases:String?=null
 
     @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @OrderBy("lastname ASC, firstname ASC")
     open val users= mutableSetOf<User>()
 
     @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
