@@ -3,6 +3,8 @@ package edu.spring.td2.controllers
 import edu.spring.td2.entities.Organization
 import edu.spring.td2.entities.User
 import edu.spring.td2.repositories.OrganizationRepository
+import edu.spring.td2.services.OrgaService
+import edu.spring.td2.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
@@ -21,6 +23,9 @@ class OrgaController {
     @Autowired
     lateinit var orgaRespository: OrganizationRepository
 
+    @Autowired
+    lateinit var orgaService:OrgaService
+
     @RequestMapping(path = ["","index"])
     fun indexAction(model:ModelMap):String{
         model["orgas"]=orgaRespository.findAll()
@@ -38,17 +43,7 @@ class OrgaController {
         @ModelAttribute orga:Organization,
         @ModelAttribute("users") users:String
     ):RedirectView{
-        if(users.trim().isNotEmpty()) {
-            users.split("\n").forEach {
-                val user = User()
-                val values = it.trim().split(" ", limit = 2)
-                user.firstname = values.getOrElse(0) { "" }
-                user.lastname = values.getOrElse(1) { "" }
-                user.email = "${user.firstname}.${user.lastname}@${orga.domain}".lowercase()
-                user.password = List(8) { (0x21..0x7e).random().toChar() }.joinToString("")
-                orga.addUser(user)
-            }
-        }
+        orgaService.addUsersFromString(users, orga)
         orgaRespository.save(orga)
         return RedirectView("/orgas/")
     }
