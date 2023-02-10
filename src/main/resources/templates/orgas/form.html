@@ -1,0 +1,27 @@
+{{> main/header }}
+<h1>Messagerie</h1>
+<h2>Organisation</h2>
+<form method="post" action="/orgas/new" class="ui form">
+{{#orga}}
+    {{#id}}
+        <input type="hidden" name="id" value="{{.}}">
+    {{/id}}
+    <div class="field">
+        <input type="text" name="name" value="{{name}}" placeholder="Nom" class="ui input" required>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <input type="text" name="domain" value="{{domain}}" placeholder="Domaine" class="ui input">
+        </div>
+        <div class="field">
+            <input type="text" name="aliases" value="{{#aliases}}{{.}}{{/aliases}}" placeholder="Alias" class="ui input">
+        </div>
+    </div>
+{{/orga}}
+    <hr>
+    <textarea name="users" placeholder="Ajout d'utilisateurs (1 par ligne en respectant le pattern {prenom nom}" rows="10"></textarea>
+    <hr>
+    <button class="ui positive button">Valider</button>
+    <a class="ui button" href="/orgas">Annuler</a>
+</form>
+{{> main/footer }}
