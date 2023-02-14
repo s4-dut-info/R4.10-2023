@@ -1,0 +1,25 @@
+{{> main/header }}
+<h2>Organisations</h2>
+{{#orga}}
+<table class="ui table">
+    <tr>
+        <td>Nom</td>
+        <td>{{name}}</td>
+    </tr>
+    <tr>
+        <td>Domaine</td>
+        <td>{{domain}}</td>
+    </tr>
+    <tr>
+        <td>Utilisateurs</td>
+        <td>
+            <ul>
+                {{#users}}
+                    <li>{{email}}</li>
+                {{/users}}
+            </ul>
+        </td>
+    </tr>
+</table>
+{{/orga}}
+{{> main/footer }}

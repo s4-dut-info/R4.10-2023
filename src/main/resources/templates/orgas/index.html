@@ -1,14 +1,9 @@
 {{> main/header }}
 <h2>Organisations</h2>
+<a class="ui button" href="/orgas/new">Ajouter une organisation...</a>
 <ul>
 {{#orgas}}
-    <li>{{name}}
-    <ul>
-        {{#users}}
-            <li>{{email}}</li>
-        {{/users}}
-    </ul>
-    </li>
+    <li>{{name}}</li>
 {{/orgas}}
 </ul>
 {{> main/footer }}
