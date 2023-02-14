@@ -3,7 +3,7 @@ package edu.spring.td2.entities
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "Groupe")
+@Table(name="groupe")
 open class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,4 +16,11 @@ open class Group {
     open var email:String?=null
     @Column(length = 20)
     open var aliases:String?=null
+
+    @ManyToOne
+    @JoinColumn(name="idOrganization", nullable = false)
+    open lateinit var organization:Organization
+
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
+    open val users= mutableSetOf<User>()
 }

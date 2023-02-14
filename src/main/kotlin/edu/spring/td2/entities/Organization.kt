@@ -10,6 +10,12 @@ open class Organization() {
         }
     }
 
+    fun addGroup(group: Group) {
+        if(groups.add(group)){
+            group.organization=this
+        }
+    }
+
     constructor(name:String):this(){
         this.name=name
     }
@@ -27,4 +33,7 @@ open class Organization() {
 
     @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     open val users= mutableSetOf<User>()
+
+    @OneToMany(mappedBy="organization", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    open val groups= mutableSetOf<Group>()
 }

@@ -1,0 +1,15 @@
+{{> main/header }}
+<h1>Messagerie</h1>
+<h2>Organisation</h2>
+{{#orga}}
+    <form method="post" action="/orgas/{{id}}/groups/new" class="ui form">
+        <input type="hidden" name="idOrga" value="{{id}}">
+        <h3>{{name}}</h3>
+        {{/orga}}
+    <hr>
+    <textarea name="groups" placeholder="Ajout de groupes (Groupes à séparer par une virgule)" rows="2"></textarea>
+    <hr>
+    <button class="ui positive button">Valider</button>
+    <a class="ui button" href="/orgas">Annuler</a>
+</form>
+{{> main/footer }}

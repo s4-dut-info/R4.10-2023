@@ -1,0 +1,45 @@
+{{> main/header }}
+<h1>Messagerie</h1>
+<h2>Organisations</h2>
+<a href="/orgas/new" class="ui orange button">
+    <i class="ui plus icon"></i>
+    Ajouter une organisation
+</a>
+<ul>
+{{#orga}}
+  <table class="ui definition table">
+      <tr>
+          <td>Nom</td>
+          <td>{{name}}</td>
+      </tr>
+      <tr>
+          <td>Domaine</td>
+          <td>{{domain}}</td>
+      </tr>
+      <tr>
+          <td>Utilisateurs</td>
+          <td>
+              <ul>
+                  {{#users}}
+                  <li>{{lastname}} - {{email}}</li>
+                  {{/users}}
+              </ul>
+          </td>
+      </tr>
+      <tr>
+          <td>Groupes</td>
+          <td>
+              <a href="/orgas/{{id}}/groups/new" class="ui mini icon button">
+                  <i class="ui plus icon"></i>
+              </a>
+              <ul>
+                  {{#groups}}
+                  <li>{{name}}</li>
+                  {{/groups}}
+              </ul>
+          </td>
+      </tr>
+  </table>
+{{/orga}}
+</ul>
+{{> main/footer }}
