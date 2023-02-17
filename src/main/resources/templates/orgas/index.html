@@ -5,18 +5,42 @@
     <i class="ui plus icon"></i>
     Ajouter une organisation
 </a>
-<ul>
+<table class="ui celled striped table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Domaine</th>
+            <th>Aliases</th>
+            <th>Stats</th>
+            <th class="right aligned">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
 {{#orgas}}
-    <li>{{name}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{domain}}</td>
+        <td>{{#aliases}}{{.}}{{/aliases}}</td>
+        <td>
+            <span class="ui label">
+                <i class="ui user icon"></i>
+                {{users.size}}
+            </span>
+            <span class="ui brown label">
+                <i class="ui users icon"></i>
+                {{groups.size}}
+            </span>
+        </td>
+        <td class="right aligned">
+            <a href="/orgas/detail/{{id}}" class="ui circular mini icon button">
+                <i class="eye icon"></i>
+            </a>
         <a href="/orgas/delete/{{id}}" class="ui circular mini icon red button">
-            <i class="ui remove icon"></i>
+            <i class="remove icon"></i>
         </a>
-    <ul>
-        {{#users}}
-            <li>{{lastname}} - {{email}}</li>
-        {{/users}}
-    </ul>
-    </li>
-{{/orgas}}
-</ul>
+        </td>
+    </tr>
+        {{/orgas}}
+    </tbody>
+</table>
 {{> main/footer }}

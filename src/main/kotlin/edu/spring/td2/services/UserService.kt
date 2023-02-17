@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService {
-    fun generatePassword():String{
-        return List(8) { (0x21..0x7e).random().toChar() }.joinToString("")
+    fun generatePassword(size:Int):String{
+        return List(size) { (0x21..0x7e).random().toChar() }.joinToString("")
     }
 }

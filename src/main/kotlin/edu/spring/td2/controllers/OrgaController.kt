@@ -2,22 +2,26 @@ package edu.spring.td2.controllers
 
 import edu.spring.td2.entities.Organization
 import edu.spring.td2.entities.User
+import edu.spring.td2.exceptions.ElementNotFoundException
 import edu.spring.td2.repositories.OrganizationRepository
 import edu.spring.td2.services.OrgaService
 import edu.spring.td2.services.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
+import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.view.RedirectView
 import java.util.*
 
 @Controller
-@RequestMapping("/orgas/")
+@RequestMapping("/orgas")
 class OrgaController {
 
     @Autowired
@@ -26,7 +30,7 @@ class OrgaController {
     @Autowired
     lateinit var orgaService:OrgaService
 
-    @RequestMapping(path = ["","index"])
+    @RequestMapping(path = ["","index","/"])
     fun indexAction(model:ModelMap):String{
         model["orgas"]=orgaRespository.findAll()
         return "/orgas/index"
@@ -53,4 +57,16 @@ class OrgaController {
         orgaRespository.deleteById(id)
         return RedirectView("/orgas/")
     }
+
+    @GetMapping("/detail/{id}")
+    fun detailAction(@PathVariable id:Int,model:ModelMap):String{
+        val option=orgaRespository.findById(id)
+        if(option.isPresent){
+            model["orga"]=option.get()
+            return "/orgas/detail"
+        }
+        throw ElementNotFoundException("Organisation d'id $id non trouvée !")
+    }
+
+
 }

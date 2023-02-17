@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class OrgaService {
+
     @Autowired
     lateinit var userService:UserService
 
@@ -14,11 +15,11 @@ class OrgaService {
         if(users.trim().isNotEmpty()) {
             users.split("\n").forEach {
                 val user = User()
-                val values = it.trim().split(" ", limit = 2)
-                user.firstname = values.getOrElse(0) { "" }
-                user.lastname = values.getOrElse(1) { "" }
+                val (firstname,lastname) = it.trim().split(" ", limit = 2)
+                user.firstname = firstname
+                user.lastname = lastname
                 user.email = "${user.firstname}.${user.lastname}@${orga.domain}".lowercase()
-                user.password = userService.generatePassword()
+                user.password= userService.generatePassword(8)
                 orga.addUser(user)
             }
         }
