@@ -1,0 +1,104 @@
+{{> /main/header }}
+<h2 class="ui header">Propriétaires <span class="ui blue left pointing label count-masters">{!masters.length!}</span></h2>
+<div class="ui attached info message">
+    <i class="icon info"></i>
+    Ajout rapide de propriétaire
+</div>
+<div class="ui attached segment">
+    <form class="ui form">
+        <div class="inline fields">
+            <div class="field">
+                <div class="ui action input">
+                    <input type="text" name="firstname" v-model="newMaster.firstname" placeholder="firstname" required>
+                    <input type="text" name="lastname" v-model="newMaster.lastname" placeholder="lastname" required>
+                    <div class="ui icon button" @click="addMaster(newMaster)">
+                        <i class="plus icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>Propriétaire</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="master in masters">
+        <td>{!master.firstname!} {!master.lastname!}</a> <span class="ui label count-master-dogs"><i class="ui dog icon"></i> {!dogs.length!}</span></td>
+        <td>
+            <form class="ui form">
+                <div class="inline fields">
+                    <div class="field">
+                        <div class="ui action input">
+                            <input type="text" name="name" placeholder="dog name" required>
+                            <div class="ui buttons">
+                                <div class="ui negative button" name="dog-action" value="give-up">Abandonner</div>
+                                <div class="or" data-text="ou"></div>
+                                <div class="ui positive button" name="dog-action" value="add">Acquérir</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div @click="removeMaster(master)" class="ui black button delete-master"><i class="ui skull crossbones icon"></i> Paix à son âme</div>
+                    </div>
+                </div>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2 class="ui header">Chiens à l'adoption <span class="ui red left pointing label count-dogs">{!dogs.length!}</span></h2>
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>
+            Chien
+        </th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="dog in dogs">
+        <td>
+            {!dog.name!}
+        </td>
+        <td>
+            <form class="ui form">
+                <div class="inline fields">
+                    <div v-if="masters" class="field">
+                        <div class="ui action input">
+                            <select name="master" class="ui selection dropdown">
+                                <option v-for="master in masters" value="{!master.id!}">{!master.firstname!} {!master.lastname!}</option>
+                            </select>
+                            <button class="ui icon button" name="dog-action" value="adopt">
+                                <i class="plus icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div v-else class="field">
+                        Pas d'adoptant
+                    </div>
+                    <div class="field">
+                        <div class="ui action input">
+                            <div class="ui negative icon button" name="dog-action" value="remove">
+                                <i class="ui sign out alternate icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+{{> /main/footer }}
+
+{{{vue}}}
