@@ -1,0 +1,29 @@
+{{> /main/header }}
+<h2 class="ui header">Propriétaires <span class="ui blue left pointing label count-masters">{!masters.length!}</span></h2>
+<div class="ui attached info message">
+    <i class="icon info"></i>
+    Ajout rapide de propriétaire
+</div>
+<div class="ui attached segment">
+    <form class="ui form">
+        <div class="inline fields">
+            <div class="field">
+                <div class="ui action input">
+                    <input type="text" v-model="newMaster.firstname" placeholder="firstname" required>
+                    <input type="text" v-model="newMaster.lastname" placeholder="lastname" required>
+                    <div class="ui icon button" @click="addMaster(newMaster)">
+                        <i class="plus icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<ul>
+    <li v-for="master in masters">
+        {!master.firstname!} {!master.lastname!}
+        <i class="ui remove icon" @click="deleteMaster(master)"></i>
+    </li>
+</ul>
+{{> /main/footer }}
+{{{vue}}}

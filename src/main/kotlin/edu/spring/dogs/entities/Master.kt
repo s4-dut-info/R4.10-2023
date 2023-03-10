@@ -1,5 +1,6 @@
 package edu.spring.dogs.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 
