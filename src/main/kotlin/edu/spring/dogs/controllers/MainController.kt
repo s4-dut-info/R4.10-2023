@@ -5,6 +5,8 @@ import edu.spring.dogs.entities.Master
 import edu.spring.dogs.repositories.DogRepository
 import edu.spring.dogs.repositories.MasterRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.context.SecurityContext
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,6 +30,7 @@ class MainController {
         val masters=masterRepository.findAll()
         model["masters"]= masters
         model["hasMasters"]= masters.count()>0
+        model["user"]=SecurityContextHolder.getContext().authentication
         model["dogs"]= dogRepository.findByMasterIsNull()
         return "index"
     }
