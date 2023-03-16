@@ -1,4 +1,4 @@
-package edu.spring.stories
+package edu.spring.dogs
 
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.junit.jupiter.api.AfterEach
@@ -30,14 +30,14 @@ import java.util.concurrent.TimeUnit
 class ApplicationTest {
 
     // CSS selectors
-    private val COUNT_DEVELOPERS=".count-developers"
-    private val COUNT_STORIES=".count-stories"
-    private val COUNT_DEVELOPER_STORIES="td .dev-story"
-    private val DELETE_DEVELOPER=".delete-developer.button"
-    private val DELETE_STORY="button[value='remove'][name='story-action']:first-child"
-    private val ADD_DEVELOPER="form[action='/developer/add'] button"
-    private val ADD_STORY="button[value='add']"
-    private val GIVEUP_STORY=".giveup-story:first-child"
+    private val COUNT_MASTERS=".count-masters"
+    private val COUNT_DOGS=".count-dogs"
+    private val COUNT_MASTER_DOGS="td .count-master-dogs"
+    private val DELETE_MASTER=".delete-master.button"
+    private val DELETE_DOG="button[value='remove'][name='dog-action']:first-child"
+    private val ADD_MASTER="form[action='/master/add'] button"
+    private val ADD_DOG="button[value='add']"
+    private val GIVEUP_DOG="button[value='give-up']"
 
     lateinit var driver: WebDriver
 
@@ -107,66 +107,69 @@ class ApplicationTest {
         Assertions.assertTrue(driver.findElement(ByCssSelector.cssSelector(cssSelector))?.isDisplayed!!)
     }
 
-    private fun countElements(cssSelector: String): Int {
-        return driver.findElements(ByCssSelector.cssSelector(cssSelector)).size
-    }
-
     @Test
     fun homePageLoadsWithMessages() {
         //Vérification de la présence des messages
         Assertions.assertTrue(driver.currentUrl?.contains("")!!);
-        assertElementContainsText("body", "Il n'y a pas de développeurs dans la base de données.");
-        assertElementContainsText("body", "Il n'y a pas d'US à attribuer dans la base de données.");
+        assertElementContainsText("body", "Il n'y a pas de maître dans la base de données.");
+        assertElementContainsText("body", "Il n'y a pas de chien à l'adoption dans la base de données.");
         checkElementIsDisplayed("input[name=firstname]")
     }
 
 
     @Test
-    fun addDevAndStories() {
-        assertElementContainsText(COUNT_DEVELOPERS, "0")
+    fun addMasterAndDogs() {
+        assertElementContainsText(COUNT_MASTERS, "0")
 
-        //Ajout d'un développeur
+        //Ajout d'un maître
         fillElement("firstname", "John")
         fillElement("lastname", "DOE")
-        btnClick(ADD_DEVELOPER)
+        btnClick(ADD_MASTER)
         assertElementContainsText("body", "John DOE")
-        assertElementContainsText(COUNT_DEVELOPERS, "1")
+        assertElementContainsText(COUNT_MASTERS, "1")
 
-        //Ajout d'une story
+        //Ajout d'un chien
         checkElementIsDisplayed("input[name=name]")
-        Assertions.assertEquals(countElements(COUNT_DEVELOPER_STORIES), 0)
-        fillElement("name", "Imprimer")
-        btnClick(ADD_STORY)
-        Assertions.assertEquals(countElements(COUNT_DEVELOPER_STORIES), 1)
+        assertElementContainsText(COUNT_MASTER_DOGS, "0")
+        fillElement("name", "Milou")
+        btnClick(ADD_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "1")
 
-        //Ajout d'une story
-        fillElement("name", "Se connecter")
-        btnClick(ADD_STORY)
-        Assertions.assertEquals(countElements(COUNT_DEVELOPER_STORIES), 2)
+        //Ajout d'un chien
+        fillElement("name", "Rex")
+        btnClick(ADD_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "2")
 
-        //Abandon d'une story
-        btnClick(GIVEUP_STORY)
-        Assertions.assertEquals(countElements(COUNT_DEVELOPER_STORIES), 1)
-        assertElementContainsText("body", "Imprimer")
-        assertElementContainsText(COUNT_STORIES, "1")
+        //Abandon d'un chien qui n'existe pas
+        fillElement("name", "notExistingDog")
+        btnClick(GIVEUP_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "2")
+        assertElementContainsText(COUNT_DOGS, "0")
 
-        //Départ d'un développeur
-        btnClick(DELETE_DEVELOPER)
-        assertElementContainsText(COUNT_DEVELOPERS, "0")
-        assertElementContainsText("body", "Il n'y a pas de développeurs dans la base de données.");
-        assertElementContainsText("body", "Imprimer")
-        assertElementContainsText("body", "Se connecter")
-        assertElementContainsText("body","Pas de devs")
-        assertElementContainsText(COUNT_STORIES, "2")
+        //Abandon d'un chien
+        fillElement("name", "Rex")
+        btnClick(GIVEUP_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "1")
+        assertElementContainsText("body", "Rex")
+        assertElementContainsText(COUNT_DOGS, "1")
 
-        //Suppression d'une story
-        btnClick(DELETE_STORY)
-        assertElementContainsText(COUNT_STORIES, "1")
+        //Disparition du maître
+        btnClick(DELETE_MASTER)
+        assertElementContainsText(COUNT_MASTERS, "0")
+        assertElementContainsText("body", "Il n'y a pas de maître dans la base de données.");
+        assertElementContainsText("body", "Rex")
+        assertElementContainsText("body", "Milou")
+        assertElementContainsText("body","Pas d'adoptant")
+        assertElementContainsText(COUNT_DOGS, "2")
 
-        //Suppression d'une story
-        btnClick(DELETE_STORY)
-        assertElementContainsText(COUNT_STORIES, "0")
-        assertElementContainsText("body", "Il n'y a pas d'US à attribuer dans la base de données.");
+        //Départ d'un chien
+        btnClick(DELETE_DOG)
+        assertElementContainsText(COUNT_DOGS, "1")
+
+        //Départ d'un chien
+        btnClick(DELETE_DOG)
+        assertElementContainsText(COUNT_DOGS, "0")
+        assertElementContainsText("body", "Il n'y a pas de chien à l'adoption dans la base de données.");
 
     }
 }

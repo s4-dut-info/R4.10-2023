@@ -1,11 +1,11 @@
-package edu.spring.stories
+package edu.spring.dogs
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class StoriesApplication
+class DogsApplication
 
 fun main(args: Array<String>) {
-    runApplication<StoriesApplication>(*args)
+    runApplication<DogsApplication>(*args)
 }

@@ -1,10 +1,10 @@
-package edu.spring.stories.entities
+package edu.spring.dogs.entities
 
 import jakarta.persistence.*
 
 
 @Entity
-open class Developer() {
+open class Master() {
     constructor(firstname:String, lastname:String):this(){
         this.firstname=firstname
         this.lastname=lastname
@@ -19,20 +19,20 @@ open class Developer() {
     @Column(length = 30)
     open var lastname: String? = null
 
-    @OneToMany(mappedBy = "developer", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    open val stories= mutableSetOf<Story>()
+    @OneToMany(mappedBy = "master", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    open val dogs= mutableSetOf<Dog>()
 
-    fun addStory(story:Story):Boolean {
-        if(stories.add(story)){
-            story.developer=this
+    fun addDog(dog:Dog):Boolean {
+        if(dogs.add(dog)){
+            dog.master=this
             return true
         }
         return false
     }
 
-    fun giveUpStory(story:Story):Boolean {
-        if(stories.remove(story)){
-            story.developer=null
+    fun giveUpDog(dog:Dog):Boolean {
+        if(dogs.remove(dog)){
+            dog.master=null
             return true
         }
         return false
@@ -40,8 +40,8 @@ open class Developer() {
 
     @PreRemove
     open fun preRemove() {
-        for (story in stories){
-            story.developer=null
+        for (dog in dogs){
+            dog.master=null
         }
     }
 }

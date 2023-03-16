@@ -1,17 +1,17 @@
 {{> main/header }}
-<h2 class="ui header">Développeurs <span class="ui olive left pointing label count-developers">{{developers.size}}</span></h2>
-<div class="ui attached olive message">
+<h2 class="ui header">Propriétaires <span class="ui blue left pointing label count-masters">{{masters.size}}</span></h2>
+<div class="ui attached info message">
     <i class="icon info"></i>
-    Ajout rapide de développeur
+    Ajout rapide de propriétaire
 </div>
     <div class="ui attached segment">
-        <form class="ui form" method="post" action="/developer/add">
+        <form class="ui form" method="post" action="/master/add">
             <div class="inline fields">
                 <div class="field">
                     <div class="ui action input">
                         <input type="text" name="firstname" placeholder="firstname" required>
                         <input type="text" name="lastname" placeholder="lastname" required>
-                        <button class="ui icon button">
+                        <button  class="ui icon button">
                             <i class="plus icon"></i>
                         </button>
                     </div>
@@ -22,99 +22,93 @@
 <table class="ui table">
     <thead>
     <tr>
-        <th>Développeur</th>
-        <th>Stories</th>
+        <th>Propriétaire</th>
         <th>Actions</th>
     </tr>
     </thead>
     <tbody>
-{{#developers}}
+{{#masters}}
     <tr>
-        <td><a href="/developer/{{id}}">{{firstname}} {{lastname}}</a>
-        </td>
+        <td><a href="/master/{{id}}">{{firstname}} {{lastname}}</a> <span class="ui label count-master-dogs"><i class="ui dog icon"></i> {{dogs.size}}</span></td>
         <td>
-            {{#stories}}
-                <div class="ui label dev-story">
-                    {{name}}
-                    <a href="/story/{{id}}/giveup" class="giveup-story"><i class="ui remove icon"></i></a>
-                </div>
-            {{/stories}}
-        </td>
-        <td>
-            <form method="post" action="/developer/{{id}}/story" class="ui form">
+            <form method="post" action="/master/{{id}}/dog" class="ui form">
                 <div class="inline fields">
                     <div class="field">
                         <div class="ui action input">
-                            <input type="text" name="name" placeholder="story name" required>
-                                <button class="ui positive button" name="story-action" value="add">Ajouter US & Affecter</button>
+                            <input type="text" name="name" placeholder="dog name" required>
+                            <div class="ui buttons">
+                                <button class="ui negative button" name="dog-action" value="give-up">Abandonner</button>
+                                <div class="or" data-text="ou"></div>
+                                <button class="ui positive button" name="dog-action" value="add">Acquérir</button>
+                            </div>
                         </div>
                     </div>
                     <div class="field">
-                        <a href="/developer/{{id}}/delete" class="ui black button delete-developer"><i class="ui sign out alternate icon"></i> Quitter le projet</a>
+                        <a href="/master/{{id}}/delete" class="ui black button delete-master"><i class="ui skull crossbones icon"></i> Paix à son âme</a>
                     </div>
                 </div>
             </form>
         </td>
     </tr>
-{{/developers}}
-    {{^hasDevelopers}}
+{{/masters}}
+    {{^hasMasters}}
         <tr>
             <td colspan="2">
                 <div class="ui icon warning message">
                     <i class="ui warning circle icon"></i>
                     <div class="content">
                         <div class="header">
-                            Pas de développeur
+                            Pas de maître
                         </div>
-                        <p>Il n'y a pas de développeurs dans la base de données.</p>
+                        <p>Il n'y a pas de maître dans la base de données.</p>
                     </div>
             </td>
         </tr>
-    {{/hasDevelopers}}
+    {{/hasMasters}}
     </tbody>
 </table>
-<h2 class="ui header">User stories à répartir <span class="ui red left pointing label count-stories">{{stories.size}}</span></h2>
+<h2 class="ui header">Chiens à l'adoption <span class="ui red left pointing label count-dogs">{{dogs.size}}</span></h2>
 <table class="ui table">
     <thead>
     <tr>
         <th>
-            US
+            Chien
         </th>
         <th>Actions</th>
     </tr>
     </thead>
     <tbody>
-    {{#stories}}
+    {{#dogs}}
         <tr>
             <td>
                 {{name}}
             </td>
             <td>
-                <form method="post" action="/story/{{id}}/action" class="ui form">
+                <form method="post" action="/dog/{{id}}/action" class="ui form">
                     <div class="inline fields">
-                        {{#hasDevelopers}}
+                        {{#hasMasters}}
                         <div class="field">
                             <div class="ui action input">
-                                <select name="developerId" class="ui selection dropdown">
-                                    {{#developers}}
+                                <select name="master" class="ui selection dropdown">
+                                    {{#masters}}
                                         <option value="{{id}}">{{firstname}} {{lastname}}</option>
-                                    {{/developers}}
+                                    {{/masters}}
                                 </select>
-                                <button class="ui icon button" name="story-action" value="affect">
+                                <button class="ui icon button" name="dog-action" value="adopt">
                                     <i class="plus icon"></i>
                                 </button>
                             </div>
                         </div>
-                        {{/hasDevelopers}}
-                        {{^hasDevelopers}}
+                        {{/hasMasters}}
+                        {{^hasMasters}}
                             <div class="field">
-                                Pas de devs
+                                Pas d'adoptant
                             </div>
-                        {{/hasDevelopers}}
+                        {{/hasMasters}}
                         <div class="field">
                             <div class="ui action input">
-                                <button class="ui negative icon button" name="story-action" value="remove">
-                                    <i class="ui remove icon"></i>
+                                <button class="ui negative icon button" name="dog-action" value="remove">
+                                    <i class="ui sign out alternate icon"></i>
                                 </button>
                             </div>
                         </div>
@@ -122,22 +116,22 @@
                 </form>
             </td>
         </tr>
-    {{/stories}}
-    {{^stories}}
+    {{/dogs}}
+    {{^dogs}}
         <tr>
             <td colspan="2">
                 <div class="ui icon success message">
                     <i class="ui info circle icon"></i>
                     <div class="content">
                         <div class="header">
-                            Aucune story
+                            Pas de chien
                         </div>
-                        <p>Il n'y a pas d'US à attribuer dans la base de données.</p>
+                        <p>Il n'y a pas de chien à l'adoption dans la base de données.</p>
                     </div>
                 </div>
             </td>
         </tr>
-    {{/stories}}
+    {{/dogs}}
     </tbody>
 </table>
 {{> main/footer }}
