@@ -4,7 +4,10 @@ import edu.spring.dogs.entities.Dog
 import edu.spring.dogs.entities.Master
 import edu.spring.dogs.repositories.DogRepository
 import edu.spring.dogs.repositories.MasterRepository
+import jakarta.annotation.security.RolesAllowed
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.annotation.Secured
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
@@ -51,6 +54,7 @@ class MainController {
     }
 
     @PostMapping("/master/add")
+    @Secured("MANAGER_MASTER")
     fun addMaster(@ModelAttribute master:Master): String {
         masterRepository.save(master)
         return "redirect:/"
