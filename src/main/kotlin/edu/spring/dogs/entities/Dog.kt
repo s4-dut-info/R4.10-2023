@@ -17,14 +17,14 @@ open class Dog() {
 	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	open var id = 0
+	open val id = 0
 
 	@Column(length = 30, nullable = false)
 	open lateinit var name: String
 
 	@ManyToOne(optional = true)
+	@RestResource(exported = false,rel = "master", path = "master")
 	@JsonBackReference
-	@RestResource(exported = false, path = "master", rel = "master")
 	open var master: Master?=null
 
 	@ManyToMany

@@ -32,13 +32,14 @@ class SPAController {
             Http.post("/masters",
                 "master",
                 JsArray.add("this.masters","master")+
-                "this.newMaster={}",
+                        "this.newMaster={}",
                 "console.log('Erreur')"),
             "master")
 
         vue.addMethod("removeMaster",
             Http.delete("'/masters/'+master.id",
-                JsArray.remove("this.masters","master"),
+                JsArray.remove("this.masters","master")+
+                        JsArray.addAll("this.dogs","master.dogs"),
                 "console.log('Erreur')"),
             "master")
 
